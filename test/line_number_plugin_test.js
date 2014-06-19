@@ -26,7 +26,7 @@ exports.line_number_plugin = {
   setUp: function(done) {
     done();
   },
-  default_options: function(test) {
+  simple_test: function(test) {
     test.expect(1);
 
     var actual = grunt.file.read('tmp/file1');

@@ -8,37 +8,49 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
 
-  grunt.registerMultiTask('line_number_plugin', 'Ye olde c style "__file__" replacer.', function() {
-    /*
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
-        }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+    grunt.registerMultiTask('line_number_plugin', 'Ye olde c style "__file__" replacer.', function () {
 
-      // Handle options.
-      src += options.punctuation;
+        this.files.forEach(function (f) {
+            if (!f.src || !f.src.length) {
+                grunt.log.error(JSON.stringify(f));
+                grunt.log.error('Must give source file.');
+                return false;
+            }
+            if (!f.dest || !f.dest.length) {
+                grunt.log.error(JSON.stringify(f));
+                grunt.log.error('Must give dest file.');
+                return false;
+            }
+            if (f.src.length !== f.dest.length) {
+                grunt.log.error(JSON.stringify(f));
+                grunt.log.error('Must give exactly one destination per source file.');
+                return false;
+            }
+            for (var i = 0; i < f.src.length; ++i) {
+                var src = f.src[i],
+                    dest = f.dest[i];
+                if (!grunt.file.exists(src)) {
+                    grunt.log.warn('Source does not exist: ' + src);
+                    continue;
+                }
+                if (!grunt.file.isFile(src)) {
+                    grunt.log.warn('Source is not a file: ' + src);
+                    continue;
+                }
+                grunt.log.writeln(src + ' -> ' + dest);
 
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
-
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+                var lineNum = 1,
+                    result = '',
+                    re = new RegExp('__LINE__', 'g');
+                //noinspection JSUnresolvedFunction
+                require('fs').readFileSync(src).toString().split(/\r?\n/).forEach(function(line){
+                    result +=  line.replace(re, lineNum++) + grunt.util.linefeed;
+                });
+                grunt.file.write(dest, result.trim() + grunt.util.linefeed);
+            }
+        });
     });
-    */
-  });
-
 };

@@ -1,7 +1,7 @@
 {
   "name": "grunt-line-number-plugin",
-  "description": "Ye olde c style \"__file__\" replacer.",
-  "version": "0.1.0",
+  "description": "Ye olde c style \"__LINE__\" replacer.",
+  "version": "0.1.1",
   "homepage": "https://github.com/sne11ius/grunt-line-number-plugin",
   "author": {
     "name": "Cornelius Lilge",
